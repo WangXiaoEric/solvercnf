@@ -43,6 +43,18 @@ void getStringFromCharArrayAdvanced(string target, int begin, int end, char resu
     {
         result[i] = target[i + begin];
     }
+    result[length] = '\0';
+    // delete target;
+    std::cout << result << std::endl;   
+}
+
+void getStringFromCharArrayAdvancedStr(string target, int begin, int end, string result)
+{
+    int length = end - begin;
+    for (int i = 0; i < length; i++)
+    {
+        result[i] = target[i + begin];
+    }
     // delete target;
     std::cout << result << std::endl;
     
@@ -69,8 +81,8 @@ void myTestFunctionAdvanced(){
     string target = "abcdefg";
     int begin = 3;
     int end = 5;
-    char * result = new char [end - begin + 1];
-    getStringFromCharArrayAdvanced(target, begin, end, result);
+    string result = "123";
+    getStringFromCharArrayAdvancedStr(target, begin, end, result);
     std::cout << result << std::endl;
 }
 
@@ -88,6 +100,9 @@ int main()
     string data;
     std::ifstream infile;
     infile.open("./testcase/testcase0.v");
+    char *result = NULL;
+    Solver s;
+
     //test
     //std::getline(infile, test);
 
@@ -112,7 +127,7 @@ int main()
                     {
                         //then should store one parameter
                         if(isBeforeCommenStr){
-                            char * result = new char [i - lastCharIndex + 1];
+                            result = new char [i - lastCharIndex + 1];
                             getStringFromCharArrayAdvanced(data, lastCharIndex, i, result);
                             // string tempSt(result);
                             // string tempSt = result;
@@ -120,9 +135,10 @@ int main()
                             std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;
                             std::cout << "key -> \\A[2][9]" <<  " value -> "  << varibleMap["\\A[2][9]"] << std::endl;
                             
-                            std::cout << "====================";
+                            std::cout << "varibleMap size  " << varibleMap.size()<< std::endl;
                             isBeforeCommenStr = false;
                             index++;
+                            //delete result;
                         }else{
                             //string deal;
                             continue;
@@ -147,6 +163,8 @@ int main()
             {
                 varibleMap["eq"] = index;
                 index++;
+                //when reach eq, jump out continue to run outer loop
+                continue;
             }
         }
 
@@ -158,22 +176,36 @@ int main()
 
                 for (int i = 0; i < data.length(); i++)
                 {
-                    if(' ' == data[i] || ',' == data[i])
+                    if(' ' == data[i] || ',' == data[i] || ';' == data[i])
                     {
                         //then should store one parameter
                         if(isBeforeCommenStr){
-                            char * result = new char [i - lastCharIndex + 1];
+                            if (index == 65)
+                            {
+                                int abc = 100;
+                            }
+                            if (index == 66)
+                            {
+                                int abc = 100;
+                            }
+
+                            result = new char [i - lastCharIndex + 1];
                             getStringFromCharArrayAdvanced(data, lastCharIndex, i, result);
                             // string tempSt(result);
                             // string tempSt = result;
-                            if(result == "wire"){
+                            if(strcmp("wire", result) == 0){
+                                isBeforeCommenStr = false;
                                 continue;
                             }
+
+                            
                             varibleMap[result] = index;
                             std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;                            
-                            std::cout << "====================";
+
+                            std::cout << "varibleMap size  " << varibleMap.size()<< std::endl;   ;
                             isBeforeCommenStr = false;
                             index++;
+                            //delete result;
                         }else{
                             //string deal;
                             continue;
@@ -193,71 +225,170 @@ int main()
                         }
                     }
                 }
+                std::getline(infile, data);
             }
 
         }
+        // deal with not
+        if(data.find("not ") != string::npos){
+            int y = 0;
+            int x = 0;
+            int parameterCount = 1;
+            bool isBeforeCommenStr = false;
+            int lastCharIndex = 0;
+            for (int i = 0; i < data.length(); i++)
+            {
+                if(' ' == data[i] || ',' == data[i] || ';' == data[i] || '(' == data[i] || ')' == data[i])
+                    {
+                        
+                        //then should store one parameter
+                        if(isBeforeCommenStr){
+                            result = new char [i - lastCharIndex + 1];
+                            //resultWire = new char [i - lastCharIndex + 1];
+                            getStringFromCharArrayAdvanced(data, lastCharIndex, i, result);
+                            // string tempSt(result);
+                            // string tempSt = result;
+                            if(strcmp("not", result) == 0){
+                                isBeforeCommenStr = false;
+                                continue;
+                            }
+                            std::cout << "key  " << result <<  " value -> " << varibleMap["new_n50_"] << std::endl;                            
+                            std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;                            
+                            if(parameterCount == 1){
+                                y = varibleMap[result];
+                                parameterCount++;
+                            }
+                            else if (parameterCount == 2)
+                            {
+                                x = varibleMap[result];
+                                parameterCount++;
+                            }
+                            
+                            isBeforeCommenStr = false;
+                            //delete result;
+                        }else{
+                            //string deal;
+                            continue;
+                        }
+                        
+                    }
+                    // If read the real characteristic
+                    else
+                    {
+                        if(!isBeforeCommenStr){
+                            isBeforeCommenStr =true;
+                            lastCharIndex = i;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+            }
+            //(-y+-x)(y +x )
+            vec<Lit> clause;
+            clause.push(~mkLit(y));
+            clause.push(~mkLit(x));
+            s.addClause(clause);
+
+            vec<Lit> clause1;
+            clause1.push(mkLit(y));
+            clause1.push(mkLit(x));
+            s.addClause(clause1);
+
+        }
+
+
+        // deal with or  (y+-x1)(y+-r2)(-y +x1 + x2)
+        if(data.find("or ") != string::npos){
+            int y = 0;
+            int x1 = 0;
+            int x2 = 0;
+            int parameterCount = 1;
+            bool isBeforeCommenStr = false;
+            int lastCharIndex = 0;
+            for (int i = 0; i < data.length(); i++)
+            {
+                if(' ' == data[i] || ',' == data[i] || ';' == data[i] || '(' == data[i] || ')' == data[i])
+                    {
+                        
+                        //then should store one parameter
+                        if(isBeforeCommenStr){
+                            result = new char [i - lastCharIndex + 1];
+                            //resultWire = new char [i - lastCharIndex + 1];
+                            getStringFromCharArrayAdvanced(data, lastCharIndex, i, result);
+                            // string tempSt(result);
+                            // string tempSt = result;
+                            if(strcmp("or", result) == 0){
+                                isBeforeCommenStr = false;
+                                continue;
+                            }
+                            std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;                            
+                            if(parameterCount == 1){
+                                y = varibleMap[result];
+                                parameterCount++;
+                            }
+                            else if (parameterCount == 2)
+                            {
+                                x1 = varibleMap[result];
+                                parameterCount++;
+                            }
+                            else if (parameterCount == 3)
+                            {
+                                x2 = varibleMap[result];
+                                parameterCount++;
+                            }
+                            
+                            isBeforeCommenStr = false;
+                            //delete result;
+                        }else{
+                            //string deal;
+                            continue;
+                        }
+                    }
+                    // If read the real characteristic
+                    else
+                    {
+                        if(!isBeforeCommenStr){
+                            isBeforeCommenStr =true;
+                            lastCharIndex = i;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+            }
+            //(y+-x1)(y+-r2)(-y +x1 + x2)
+            vec<Lit> clause;
+            clause.push(mkLit(y));
+            clause.push(~mkLit(x1));
+            s.addClause(clause);
+
+            vec<Lit> clause1;
+            clause1.push(mkLit(y));
+            clause1.push(~mkLit(x2));
+            s.addClause(clause1);
+
+            vec<Lit> clause2;
+            clause2.push(~mkLit(y));
+            clause2.push(mkLit(x1));
+            clause2.push(mkLit(x2));
+            s.addClause(clause2);
+        }
+
+
+
+
+
+
         std::cout << data << std::endl;
     }
 
- 
-	// infile >> data;
-	// std::cout << "second read data from file1.dat == " << data << std::endl;
+
 	infile.close();
 
-
-    // std::cout << "Test"<< std::endl;
-    // Solver s;
-
-    // vec<Lit> clause1;
-    // clause1.push(mkLit(2));
-    // clause1.push(~mkLit(4));
-
-    // vec<Lit> clause2;
-    // clause2.push(~mkLit(1));
-    // clause2.push(~mkLit(3));
-    // clause2.push(~mkLit(4));
-
-    // vec<Lit> clause3;
-    // clause3.push(~mkLit(3));
-    // clause3.push(mkLit(4));
-
-    // vec<Lit> clause4;
-    // clause4.push(mkLit(1));
-    // clause4.push(~mkLit(2));
-    // clause4.push(~mkLit(3));
-
-    // vec<Lit> clause5;
-    // clause5.push(~mkLit(1));
-    // clause5.push(~mkLit(3));
-    // clause5.push(mkLit(4));
-
-    // vec<Lit> clause6;
-    // clause6.push(~mkLit(2));
-    // clause6.push(~mkLit(3));
-
-    // vec<Lit> clause7;
-    // clause7.push(mkLit(2));
-    // // clause7.push(mkLit(3));
-
-    // vec<Lit> clause8;
-    // clause8.push(~mkLit(2));
-
-
-
-    // while(4 >= s.nVars()) 
-    //     s.newVar();
-
-    // s.addClause(clause1);
-    // s.addClause(clause2);
-    // s.addClause(clause3);
-    // s.addClause(clause4);
-    // s.addClause(clause5);
-    // s.addClause(clause6);
-    // s.addClause(clause7);
-    // s.addClause(clause7);
-
-
-    // bool ans = s.solve();
-    // std::cout << "This is :" <<ans << std::endl;
+    bool ans = s.solve();
+    std::cout << "This is :" <<ans << std::endl;
     return 0;
 }

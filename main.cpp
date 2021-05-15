@@ -27,7 +27,7 @@ struct eqstr
 void getStringFromCharArray(char target[], int begin, int end, char result[])
 {
     int length = end - begin;
-    for (int i = 0; i <= length; i++)
+    for (int i = 0; i < length; i++)
     {
         result[i] = target[i + begin];
     }
@@ -90,7 +90,16 @@ int main()
                         if(isBeforeCommenStr){
                             char * result = new char [i - lastCharIndex + 1];
                             getStringFromCharArray(data, lastCharIndex, i, result);
+                            // string tempSt(result);
+                            // string tempSt = result;
                             varibleMap[result] = index;
+                            
+                            std::cout << "key -> " << result <<  " value -> " << varibleMap[result] << std::endl;
+                            std::cout << "key -> \\A[2][9]" <<  " value -> "  << varibleMap["\\A[2][9]"] << std::endl;
+                            
+                            std::cout << "====================";
+
+                            
 
                         }else{
                             //string deal;

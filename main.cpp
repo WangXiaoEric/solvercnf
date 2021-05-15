@@ -99,8 +99,6 @@ int main()
 
         //deal with input and output
         if(data.find("module miter") != string::npos){
-
-
             while(std::getline(infile, data) && data.find(");") == string::npos){
                 //read one more line
                 //int i=0;
@@ -119,8 +117,7 @@ int main()
                             // string tempSt(result);
                             // string tempSt = result;
                             varibleMap[result] = index;
-                            
-                            std::cout << "key -> " << result <<  " value -> " << varibleMap[result] << std::endl;
+                            std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;
                             std::cout << "key -> \\A[2][9]" <<  " value -> "  << varibleMap["\\A[2][9]"] << std::endl;
                             
                             std::cout << "====================";
@@ -146,9 +143,59 @@ int main()
                     }
                 }
             }
-            if(eq  );)
+            if(data.find("eq  );") != string::npos)
+            {
+                varibleMap["eq"] = index;
+                index++;
+            }
         }
 
+        if(data.find(" wire ") != string::npos){
+            while(data.find(");") == string::npos)
+            {
+                bool isBeforeCommenStr = false;
+                int lastCharIndex = 0;
+
+                for (int i = 0; i < data.length(); i++)
+                {
+                    if(' ' == data[i] || ',' == data[i])
+                    {
+                        //then should store one parameter
+                        if(isBeforeCommenStr){
+                            char * result = new char [i - lastCharIndex + 1];
+                            getStringFromCharArrayAdvanced(data, lastCharIndex, i, result);
+                            // string tempSt(result);
+                            // string tempSt = result;
+                            if(result == "wire"){
+                                continue;
+                            }
+                            varibleMap[result] = index;
+                            std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;                            
+                            std::cout << "====================";
+                            isBeforeCommenStr = false;
+                            index++;
+                        }else{
+                            //string deal;
+                            continue;
+                        }
+                        
+                    }
+                    // If read the real characteristic
+                    else
+                    {
+                        if(!isBeforeCommenStr){
+                            isBeforeCommenStr =true;
+                            lastCharIndex = i;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                }
+            }
+
+        }
         std::cout << data << std::endl;
     }
 

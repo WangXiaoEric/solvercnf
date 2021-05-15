@@ -4,6 +4,7 @@
 
 #include <fstream>
 #include <string>
+#include <string.h>   
 #include <hash_fun.h>
 
 using namespace ::Glucose;
@@ -11,7 +12,6 @@ using  std::string;
 using google::dense_hash_map; 
 
 using __gnu_cxx::hash;
-// using std::dense_hash_map;
 
 
 
@@ -23,52 +23,99 @@ struct eqstr
   }
 };
 
+
+void getStringFromCharArray(char target[], int begin, int end, char result[])
+{
+    int length = end - begin;
+    for (int i = 0; i <= length; i++)
+    {
+        result[i] = target[i + begin];
+    }
+    // delete target;
+    std::cout << result << std::endl;
+    
+}
+
+
+void myTestFunction(){
+    char * target = new char [7];
+    target[0] = 'a';
+    target[1] = 'b';
+    target[2] = 'c';
+    target[3] = 'd';
+    target[4] = 'e';
+    target[6] = 'g';
+
+    int begin = 3;
+    int end = 5;
+    char * result = new char [end - begin + 1];
+    getStringFromCharArray(target, begin, end, result);
+    std::cout << result << std::endl;
+}
+
 int main()
 {
+    //myTestFunction();
+
+    //Store varibale and its index;
+    dense_hash_map<const char*, int, __gnu_cxx::hash<const char*>, eqstr> varibleMap;
+    varibleMap.set_empty_key(NULL);
+
     //Temp Data Structure
     char data[100];
     std::ifstream infile;
     infile.open("./testcase/testcase0.v");
 
-     ;
-
-    dense_hash_map<char*, int> keyValue;
-
-    while (!infile.eof()){// find the end of the file
-
+    int index = 1;
+    while (!infile.eof()){// find the end of the filetarget
         infile.getline(data,100);
         string temp = data;
 
         //deal with input and output
         if(temp.find("module miter") != string::npos){
+
             infile.getline(data,100);
-            int i=0;
-            bool isContinue = false;
-            
-            int tempKeyLentgh = 0;
-            string tempKeyChar;
-            bool isBeforeCommenStr = false;
-            while(data[i++] != '\0'){
-                if(' ' == data[i] || ',' == data[i])
-                {
-                    if(isBeforeCommenStr){
+            string singleLineData = data;
+            while(singleLineData.find(");") == string::npos){
+                //read one more line
+                int i=0;
+                
+                bool isBeforeCommenStr = false;            // 
+                int lastCharIndex = 0;
+
+                while(data[i++] != '\0'){
+                    if(' ' == data[i] || ',' == data[i])
+                    {
+                        //then should store one parameter
+                        if(isBeforeCommenStr){
+                            char * result = new char [i - lastCharIndex + 1];
+                            getStringFromCharArray(data, lastCharIndex, i, result);
+                            varibleMap[result] = index;
+
+                        }else{
+                            //string deal;
+                            continue;
+                        }
                         
                     }
-                    //string deal;
-                    continue;
-                }
-                else
-                {
-                    isContinue = true;
-
-
-
+                    // If read the real characteristic
+                    else
+                    {
+                        if(!isBeforeCommenStr){
+                            isBeforeCommenStr =true;
+                            lastCharIndex = i;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
                 }
             }
             
+            
 
         }
-
 
         std::cout << data << std::endl;
     }

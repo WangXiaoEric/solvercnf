@@ -3,18 +3,73 @@
 #include "glucose.hpp"
 
 #include <fstream>
-#include <iostream>
+#include <string>
+#include <hash_fun.h>
 
 using namespace ::Glucose;
+using  std::string;
+using google::dense_hash_map; 
+
+using __gnu_cxx::hash;
+// using std::dense_hash_map;
+
+
+
+struct eqstr
+{
+  bool operator()(const char* s1, const char* s2) const
+  {
+    return (s1 == s2) || (s1 && s2 && strcmp(s1, s2) == 0);
+  }
+};
 
 int main()
 {
+    //Temp Data Structure
     char data[100];
     std::ifstream infile;
     infile.open("./testcase/testcase0.v");
 
+     ;
+
+    dense_hash_map<char*, int> keyValue;
+
     while (!infile.eof()){// find the end of the file
+
         infile.getline(data,100);
+        string temp = data;
+
+        //deal with input and output
+        if(temp.find("module miter") != string::npos){
+            infile.getline(data,100);
+            int i=0;
+            bool isContinue = false;
+            
+            int tempKeyLentgh = 0;
+            string tempKeyChar;
+            bool isBeforeCommenStr = false;
+            while(data[i++] != '\0'){
+                if(' ' == data[i] || ',' == data[i])
+                {
+                    if(isBeforeCommenStr){
+                        
+                    }
+                    //string deal;
+                    continue;
+                }
+                else
+                {
+                    isContinue = true;
+
+
+
+                }
+            }
+            
+
+        }
+
+
         std::cout << data << std::endl;
     }
 

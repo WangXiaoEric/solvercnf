@@ -36,6 +36,18 @@ void getStringFromCharArray(char target[], int begin, int end, char result[])
     
 }
 
+void getStringFromCharArrayAdvanced(string target, int begin, int end, char result[])
+{
+    int length = end - begin;
+    for (int i = 0; i < length; i++)
+    {
+        result[i] = target[i + begin];
+    }
+    // delete target;
+    std::cout << result << std::endl;
+    
+}
+
 
 void myTestFunction(){
     char * target = new char [7];
@@ -53,43 +65,57 @@ void myTestFunction(){
     std::cout << result << std::endl;
 }
 
+void myTestFunctionAdvanced(){
+    string target = "abcdefg";
+    int begin = 3;
+    int end = 5;
+    char * result = new char [end - begin + 1];
+    getStringFromCharArrayAdvanced(target, begin, end, result);
+    std::cout << result << std::endl;
+}
+
+
 int main()
 {
-    //myTestFunction();
+    //myTestFunctionAdvanced();
 
     //Store varibale and its index;
     dense_hash_map<const char*, int, __gnu_cxx::hash<const char*>, eqstr> varibleMap;
     varibleMap.set_empty_key(NULL);
 
     //Temp Data Structure
-    char data[100];
+    //char data[100];
+    string data;
     std::ifstream infile;
     infile.open("./testcase/testcase0.v");
+    //test
+    //std::getline(infile, test);
 
     int index = 1;
     while (!infile.eof()){// find the end of the filetarget
-        infile.getline(data,100);
-        string temp = data;
+        std::getline(infile, data);
+        //infile.getline(data,100);
+        //string temp = data;
 
         //deal with input and output
-        if(temp.find("module miter") != string::npos){
+        if(data.find("module miter") != string::npos){
 
-            infile.getline(data,100);
-            string singleLineData = data;
-            while(singleLineData.find(");") == string::npos){
+
+            while(std::getline(infile, data) && data.find(");") == string::npos){
                 //read one more line
-                int i=0;
+                //int i=0;
                 
                 bool isBeforeCommenStr = false;            // 
                 int lastCharIndex = 0;
 
-                while(data[i++] != '\0'){
+                for (int i = 0; i < data.length(); i++)
+                {
                     if(' ' == data[i] || ',' == data[i])
                     {
                         //then should store one parameter
                         if(isBeforeCommenStr){
                             char * result = new char [i - lastCharIndex + 1];
-                            getStringFromCharArray(data, lastCharIndex, i, result);
+                            getStringFromCharArrayAdvanced(data, lastCharIndex, i, result);
                             // string tempSt(result);
                             // string tempSt = result;
                             varibleMap[result] = index;
@@ -98,9 +124,8 @@ int main()
                             std::cout << "key -> \\A[2][9]" <<  " value -> "  << varibleMap["\\A[2][9]"] << std::endl;
                             
                             std::cout << "====================";
-
-                            
-
+                            isBeforeCommenStr = false;
+                            index++;
                         }else{
                             //string deal;
                             continue;
@@ -121,9 +146,7 @@ int main()
                     }
                 }
             }
-            
-            
-
+            if(eq  );)
         }
 
         std::cout << data << std::endl;

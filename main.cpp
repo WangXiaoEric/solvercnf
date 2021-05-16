@@ -1,13 +1,15 @@
 #include <iostream>
-#include <google/dense_hash_map>
 #include "glucose.hpp"
+using namespace ::Glucose;
+
+#include <google/dense_hash_map>
 
 #include <fstream>
 #include <string>
 #include <string.h>   
 #include <hash_fun.h>
 
-using namespace ::Glucose;
+
 using  std::string;
 using google::dense_hash_map; 
 
@@ -89,6 +91,8 @@ void myTestFunctionAdvanced(){
 
 int main()
 {
+
+    Solver s;
     //myTestFunctionAdvanced();
 
     //Store varibale and its index;
@@ -101,7 +105,9 @@ int main()
     std::ifstream infile;
     infile.open("./testcase/testcase0.v");
     char *result = NULL;
-    Solver s;
+
+    int clauseCount = 0;
+    
 
     //test
     //std::getline(infile, test);
@@ -229,8 +235,11 @@ int main()
             }
 
         }
+        // initialize newVar
+        while(varibleMap.size() + 1 >= s.nVars()) s.newVar();
+
         // deal with not
-        if(data.find("not ") != string::npos){
+        if(data.find("not  (") != string::npos){
             int y = 0;
             int x = 0;
             int parameterCount = 1;
@@ -252,7 +261,6 @@ int main()
                                 isBeforeCommenStr = false;
                                 continue;
                             }
-                            std::cout << "key  " << result <<  " value -> " << varibleMap["new_n50_"] << std::endl;                            
                             std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;                            
                             if(parameterCount == 1){
                                 y = varibleMap[result];
@@ -289,12 +297,15 @@ int main()
             vec<Lit> clause;
             clause.push(~mkLit(y));
             clause.push(~mkLit(x));
+
             s.addClause(clause);
+            clauseCount++;
 
             vec<Lit> clause1;
             clause1.push(mkLit(y));
             clause1.push(mkLit(x));
             s.addClause(clause1);
+            clauseCount++;
 
         }
 
@@ -367,7 +378,7 @@ int main()
         }
 
         // deal with or  (y+-x1)(y+-r2)(-y +x1 + x2)
-        if(data.find("or ") != string::npos){
+        if(data.find("or   (") != string::npos){
             int y = 0;
             int x1 = 0;
             int x2 = 0;
@@ -431,21 +442,24 @@ int main()
             clause.push(mkLit(y));
             clause.push(~mkLit(x1));
             s.addClause(clause);
+            clauseCount++;
 
             vec<Lit> clause1;
             clause1.push(mkLit(y));
             clause1.push(~mkLit(x2));
             s.addClause(clause1);
+            clauseCount++;
 
             vec<Lit> clause2;
             clause2.push(~mkLit(y));
             clause2.push(mkLit(x1));
             clause2.push(mkLit(x2));
             s.addClause(clause2);
+            clauseCount++;
         }
 
         // deal with and  (-y+x1)(-y+x2)(y+-x1+-x2)
-        if(data.find("and ") != string::npos){
+        if(data.find("and  (") != string::npos){
             int y = 0;
             int x1 = 0;
             int x2 = 0;
@@ -509,21 +523,24 @@ int main()
             clause.push(~mkLit(y));
             clause.push(mkLit(x1));
             s.addClause(clause);
+            clauseCount++;
 
             vec<Lit> clause1;
             clause1.push(~mkLit(y));
             clause1.push(mkLit(x2));
             s.addClause(clause1);
+            clauseCount++;
 
             vec<Lit> clause2;
             clause2.push(mkLit(y));
             clause2.push(~mkLit(x1));
             clause2.push(~mkLit(x2));
             s.addClause(clause2);
+            clauseCount++;
         }
 
         // deal nand (y+x1)(y+x2)(-y+-x1 +-x2)
-        if(data.find("nand ") != string::npos){
+        if(data.find("nand (") != string::npos){
             int y = 0;
             int x1 = 0;
             int x2 = 0;
@@ -587,21 +604,24 @@ int main()
             clause.push(mkLit(y));
             clause.push(mkLit(x1));
             s.addClause(clause);
+            clauseCount++;
 
             vec<Lit> clause1;
             clause1.push(mkLit(y));
             clause1.push(mkLit(x2));
             s.addClause(clause1);
+            clauseCount++;
 
             vec<Lit> clause2;
             clause2.push(~mkLit(y));
             clause2.push(~mkLit(x1));
             clause2.push(~mkLit(x2));
             s.addClause(clause2);
+            clauseCount++;
         }
 
         // deal nor (-y+-x1))(-y+-x2)(y +x1 +x2)
-        if(data.find("nor ") != string::npos){
+        if(data.find("nor  (") != string::npos){
             int y = 0;
             int x1 = 0;
             int x2 = 0;
@@ -665,21 +685,24 @@ int main()
             clause.push(~mkLit(y));
             clause.push(mkLit(x1));
             s.addClause(clause);
+            clauseCount++;
 
             vec<Lit> clause1;
             clause1.push(~mkLit(y));
             clause1.push(mkLit(x2));
             s.addClause(clause1);
+            clauseCount++;
 
             vec<Lit> clause2;
             clause2.push(mkLit(y));
             clause2.push(mkLit(x1));
             clause2.push(mkLit(x2));
             s.addClause(clause2);
+            clauseCount++;
         }
 
         // deal xor (-y+x1+x2)(-y+-x1+-x2)(y+-x1+x2)(y +x1+-x2)
-        if(data.find("xor ") != string::npos){
+        if(data.find("xor  (") != string::npos){
             int y = 0;
             int x1 = 0;
             int x2 = 0;
@@ -744,28 +767,32 @@ int main()
             clause.push(mkLit(x1));
             clause.push(mkLit(x2));
             s.addClause(clause);
+            clauseCount++;
 
             vec<Lit> clause1;
             clause1.push(~mkLit(y));
             clause1.push(~mkLit(x1));
             clause1.push(~mkLit(x2));
             s.addClause(clause1);
+            clauseCount++;
 
             vec<Lit> clause2;
             clause2.push(mkLit(y));
             clause2.push(~mkLit(x1));
             clause2.push(mkLit(x2));
             s.addClause(clause2);
+            clauseCount++;
 
             vec<Lit> clause3;
             clause3.push(mkLit(y));
             clause3.push(mkLit(x1));
             clause3.push(~mkLit(x2));
             s.addClause(clause3);
+            clauseCount++;
         }
 
         // deal xnor (y+x1+x2)(y +-x1 +-x2)(-y+-x1+x2)(-y +x1 +-x2)
-        if(data.find("xnor ") != string::npos){
+        if(data.find("xnor (") != string::npos){
             int y = 0;
             int x1 = 0;
             int x2 = 0;
@@ -830,32 +857,52 @@ int main()
             clause.push(mkLit(x1));
             clause.push(mkLit(x2));
             s.addClause(clause);
+            clauseCount++;
 
             vec<Lit> clause1;
             clause1.push(mkLit(y));
             clause1.push(~mkLit(x1));
             clause1.push(~mkLit(x2));
             s.addClause(clause1);
+            clauseCount++;
 
             vec<Lit> clause2;
             clause2.push(~mkLit(y));
             clause2.push(~mkLit(x1));
             clause2.push(mkLit(x2));
             s.addClause(clause2);
+            clauseCount++;
 
             vec<Lit> clause3;
             clause3.push(~mkLit(y));
             clause3.push(mkLit(x1));
             clause3.push(~mkLit(x2));
             s.addClause(clause3);
+            clauseCount++;
         }
 
     }
 
 
-	infile.close();
+	
+
+    
+    // vec<Lit> clause;
+    // clause.push(mkLit(100));
+    // std::cout << s.nVars()<< std::endl;
+    // clause.push(mkLit(101));
+    // clause.push(~mkLit(102));
+    // while(4 >= s.nVars()) 
+    // s.newVar();
+    // s.addClause(clause);
+    std::cout << "clauseCount is :" <<clauseCount << std::endl;
+
+    s.printClause(1000);
+    s.printInitialClause(1);
 
     bool ans = s.solve();
     std::cout << "This is :" <<ans << std::endl;
+    infile.close();
+
     return 0;
 }

@@ -10,9 +10,6 @@ using std::endl;
 using __gnu_cxx::hash;  // or __gnu_cxx::hash, or maybe tr1::hash, depending on your OS
 using  std::string;
 
-
-
-
 struct eqstr
 {
   bool operator()(const char* s1, const char* s2) const

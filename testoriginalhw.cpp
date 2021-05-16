@@ -55,14 +55,14 @@ clause6.push(~mkLit(2));
 clause6.push(~mkLit(3));
 s.addClause(clause6);
 
-// vec<Lit> clause7;
-// clause7.push(mkLit(2));
-// s.addClause(clause7);
-// clause7.push(mkLit(3));
+vec<Lit> clause7;
+clause7.push(mkLit(2));
+clause7.push(mkLit(3));
+s.addClause(clause7);
 
-// vec<Lit> clause8;
-// clause8.push(~mkLit(2));
-//s.addClause(clause3);
+vec<Lit> clause8;
+clause8.push(~mkLit(2));
+s.addClause(clause8);
 
 
 

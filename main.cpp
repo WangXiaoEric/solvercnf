@@ -8,6 +8,7 @@ using namespace ::Glucose;
 #include <string>
 #include <string.h>   
 #include <hash_fun.h>
+#include <vector>
 
 
 using  std::string;
@@ -47,7 +48,7 @@ void getStringFromCharArrayAdvanced(string target, int begin, int end, char resu
     }
     result[length] = '\0';
     // delete target;
-    std::cout << result << std::endl;   
+    //std::cout << result << std::endl;   
 }
 
 void getStringFromCharArrayAdvancedStr(string target, int begin, int end, string result)
@@ -105,10 +106,11 @@ int main()
     //char data[100];
     string data;
     std::ifstream infile;
-    infile.open("./testcase/testcase0.v");
+    infile.open("./testcase/testcase6.v");
     char *result = NULL;
 
     int clauseCount = 0;
+    std::vector<string> inputVector;
     
 
     //test
@@ -140,10 +142,12 @@ int main()
                             // string tempSt(result);
                             // string tempSt = result;
                             varibleMap[result] = index;
-                            std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;
-                            std::cout << "key -> \\A[2][9]" <<  " value -> "  << varibleMap["\\A[2][9]"] << std::endl;
+                            //std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;
+                            //std::cout << "key -> \\A[2][9]" <<  " value -> "  << varibleMap["\\A[2][9]"] << std::endl;
                             
-                            std::cout << "varibleMap size  " << varibleMap.size()<< std::endl;
+                            //std::cout << "varibleMap size  " << varibleMap.size()<< std::endl;
+
+                            inputVector.push_back(result);
                             isBeforeCommenStr = false;
                             index++;
                             //delete result;
@@ -199,9 +203,11 @@ int main()
 
                             
                             varibleMap[result] = index;
-                            std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;                            
+                            //std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;                            
 
-                            std::cout << "varibleMap size  " << varibleMap.size()<< std::endl;   ;
+                            //std::cout << "varibleMap size  " << varibleMap.size()<< std::endl;
+                            inputVector.push_back(result);
+
                             isBeforeCommenStr = false;
                             index++;
                             //delete result;
@@ -254,7 +260,7 @@ int main()
                                 isBeforeCommenStr = false;
                                 continue;
                             }
-                            std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;                            
+                            //std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;                            
                             if(parameterCount == 1){
                                 y = varibleMap[result];
                                 parameterCount++;
@@ -325,7 +331,7 @@ int main()
                                 isBeforeCommenStr = false;
                                 continue;
                             }
-                            std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;                            
+                            //std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;                            
                             if(parameterCount == 1){
                                 y = varibleMap[result];
                                 parameterCount++;
@@ -394,7 +400,7 @@ int main()
                                 isBeforeCommenStr = false;
                                 continue;
                             }
-                            std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;                            
+                            //std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;                            
                             if(parameterCount == 1){
                                 y = varibleMap[result];
                                 parameterCount++;
@@ -475,7 +481,7 @@ int main()
                                 isBeforeCommenStr = false;
                                 continue;
                             }
-                            std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;                            
+                            //std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;                            
                             if(parameterCount == 1){
                                 y = varibleMap[result];
                                 parameterCount++;
@@ -556,7 +562,7 @@ int main()
                                 isBeforeCommenStr = false;
                                 continue;
                             }
-                            std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;                            
+                            //std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;                            
                             if(parameterCount == 1){
                                 y = varibleMap[result];
                                 parameterCount++;
@@ -637,7 +643,7 @@ int main()
                                 isBeforeCommenStr = false;
                                 continue;
                             }
-                            std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;                            
+                            //std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;                            
                             if(parameterCount == 1){
                                 y = varibleMap[result];
                                 parameterCount++;
@@ -718,7 +724,7 @@ int main()
                                 isBeforeCommenStr = false;
                                 continue;
                             }
-                            std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;                            
+                            //std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;                            
                             if(parameterCount == 1){
                                 y = varibleMap[result];
                                 parameterCount++;
@@ -808,7 +814,7 @@ int main()
                                 isBeforeCommenStr = false;
                                 continue;
                             }
-                            std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;                            
+                            //std::cout << "key  " << result <<  " value -> " << varibleMap[result] << std::endl;                            
                             if(parameterCount == 1){
                                 y = varibleMap[result];
                                 parameterCount++;
@@ -893,9 +899,26 @@ int main()
     // s.printClause(1000);
     // s.printInitialClause(1);
 
+
+
     bool ans = s.solve();
     std::cout << "This is :" <<ans << std::endl;
-    
+    //ht::iterator it = varibleMap.begin();
 
+    // for (dense_hash_map<int*, int>::iterator it = varibleMap.begin(); it != varibleMap.end(); ++it) {
+
+    //     std::cout << "EQ" << std::endl;
+    // }
+    
+    if(ans){
+        std::cout << "EQ" << std::endl;
+    }else{
+        std::cout << "NEQ" << std::endl;
+        for (int i = 0; i < inputVector.size();i++)
+        {
+            std::cout << "<" << inputVector[i] << "> <0|1>" << std::endl;
+        }
+    }
+    
     return 0;
 }

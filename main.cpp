@@ -89,10 +89,12 @@ void myTestFunctionAdvanced(){
 }
 
 
+Solver s;
+
 int main()
 {
 
-    Solver s;
+    
     //myTestFunctionAdvanced();
 
     //Store varibale and its index;
@@ -186,15 +188,6 @@ int main()
                     {
                         //then should store one parameter
                         if(isBeforeCommenStr){
-                            if (index == 65)
-                            {
-                                int abc = 100;
-                            }
-                            if (index == 66)
-                            {
-                                int abc = 100;
-                            }
-
                             result = new char [i - lastCharIndex + 1];
                             getStringFromCharArrayAdvanced(data, lastCharIndex, i, result);
                             // string tempSt(result);
@@ -683,13 +676,13 @@ int main()
             //deal nor (-y+-x1))(-y+-x2)(y +x1 +x2)
             vec<Lit> clause;
             clause.push(~mkLit(y));
-            clause.push(mkLit(x1));
+            clause.push(~mkLit(x1));
             s.addClause(clause);
             clauseCount++;
 
             vec<Lit> clause1;
             clause1.push(~mkLit(y));
-            clause1.push(mkLit(x2));
+            clause1.push(~mkLit(x2));
             s.addClause(clause1);
             clauseCount++;
 
@@ -851,7 +844,7 @@ int main()
                         }
                     }
             }
-            //deal xor (y+x1+x2)(y +-x1 +-x2)(-y+-x1+x2)(-y +x1 +-x2)
+            //deal  xnor (y+x1+x2)(y +-x1 +-x2)(-y+-x1+x2)(-y +x1 +-x2)
             vec<Lit> clause;
             clause.push(mkLit(y));
             clause.push(mkLit(x1));
@@ -885,7 +878,7 @@ int main()
 
 
 	
-
+    infile.close();
     
     // vec<Lit> clause;
     // clause.push(mkLit(100));
@@ -897,12 +890,12 @@ int main()
     // s.addClause(clause);
     std::cout << "clauseCount is :" <<clauseCount << std::endl;
 
-    s.printClause(1000);
-    s.printInitialClause(1);
+    // s.printClause(1000);
+    // s.printInitialClause(1);
 
     bool ans = s.solve();
     std::cout << "This is :" <<ans << std::endl;
-    infile.close();
+    
 
     return 0;
 }

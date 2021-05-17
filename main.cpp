@@ -106,7 +106,7 @@ int main()
     //char data[100];
     string data;
     std::ifstream infile;
-    infile.open("./testcase/testcase6.v");
+    infile.open("./testcase/testcase1.v");
     char *result = NULL;
 
     int clauseCount = 0;
@@ -174,6 +174,7 @@ int main()
             if(data.find("eq  );") != string::npos)
             {
                 varibleMap["eq"] = index;
+                inputVector.push_back("eq");
                 index++;
                 //when reach eq, jump out continue to run outer loop
                 continue;
@@ -882,6 +883,12 @@ int main()
 
     }
 
+    // add the primary output clause;
+    int eqindex = varibleMap["eq"];
+    std::cout << "eqindex is :" <<eqindex << std::endl;
+    vec<Lit> clauseeq;
+    clauseeq.push(mkLit(eqindex));
+    s.addClause(clauseeq);
 
 	
     infile.close();
@@ -894,6 +901,7 @@ int main()
     // while(4 >= s.nVars()) 
     // s.newVar();
     // s.addClause(clause);
+    
     std::cout << "clauseCount is :" <<clauseCount << std::endl;
 
     // s.printClause(1000);
@@ -909,11 +917,15 @@ int main()
 
     //     std::cout << "EQ" << std::endl;
     // }
+
+    std::cout << "inputVector size is :" << inputVector.size() << std::endl;
     
     if(ans){
         std::cout << "EQ" << std::endl;
     }else{
         std::cout << "NEQ" << std::endl;
+        std::cout << "s.valuePhase(1);" << s.valuePhase(1) << std::endl;
+        std::cout << "s.valuePhase(2);" << s.valuePhase(2) << std::endl;
         for (int i = 0; i < inputVector.size();i++)
         {
             std::cout << "<" << inputVector[i] << "> <0|1>" << std::endl;

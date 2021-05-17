@@ -1,5 +1,8 @@
 #include <iostream>
 #include "glucose.hpp"
+
+
+
 using namespace ::Glucose;
 
 #include <google/dense_hash_map>
@@ -9,6 +12,8 @@ using namespace ::Glucose;
 #include <string.h>   
 #include <hash_fun.h>
 #include <vector>
+
+
 
 
 using  std::string;
@@ -106,7 +111,7 @@ int main()
     //char data[100];
     string data;
     std::ifstream infile;
-    infile.open("./testcase/testcase1.v");
+    infile.open("./testcase/testcase5.v");
     char *result = NULL;
 
     int clauseCount = 0;
@@ -922,14 +927,27 @@ int main()
     
     if(ans){
         std::cout << "EQ" << std::endl;
+        std::cout << "s.valuePhase(1);" << s.valuePhase(1) << std::endl;
+        std::cout << "s.valuePhase(2);" << s.valuePhase(2) << std::endl;
+        s.printLit(mkLit(1));
+        s.printLit(mkLit(2));
+
+        
     }else{
         std::cout << "NEQ" << std::endl;
         std::cout << "s.valuePhase(1);" << s.valuePhase(1) << std::endl;
         std::cout << "s.valuePhase(2);" << s.valuePhase(2) << std::endl;
-        for (int i = 0; i < inputVector.size();i++)
-        {
-            std::cout << "<" << inputVector[i] << "> <0|1>" << std::endl;
-        }
+
+        s.printLit(mkLit(1));
+        std::cout << std::endl;
+        s.printLit(mkLit(2)); 
+        std::cout << std::endl;
+
+        std::cout << "END NEQ" << std::endl;
+        // for (int i = 0; i < inputVector.size();i++)
+        // {
+        //     std::cout << "<" << inputVector[i] << "> <0|1>" << std::endl;
+        // }
     }
     
     return 0;

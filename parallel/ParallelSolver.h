@@ -50,6 +50,9 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 #ifndef PARALLELSOLVER_H
 #define	PARALLELSOLVER_H
 
+#include "../glucose.hpp"
+
+
 #include "core/SolverTypes.h"
 #include "core/Solver.h"
 #include "simp/SimpSolver.h"

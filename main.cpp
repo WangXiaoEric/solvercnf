@@ -5,7 +5,7 @@
 
 using namespace ::Glucose;
 
-#include <google/dense_hash_map>
+// #include <google/dense_hash_map>
 
 #include <fstream>
 #include <string>
@@ -19,9 +19,8 @@ using namespace ::Glucose;
 
 
 using  std::string;
-using google::dense_hash_map; 
-
-using __gnu_cxx::hash;
+// using google::dense_hash_map; 
+// using __gnu_cxx::hash;
 
 
 
@@ -74,8 +73,8 @@ Solver s;
 
 int main(int argc, char* argv[]) {
     
-    clock_t startTime,endTime;
-    startTime = clock();//计时开始
+    //clock_t startTime,endTime;
+    //startTime = clock();//计时开始
     //delete the log result file.
     remove(argv[2]);
 
@@ -86,8 +85,10 @@ int main(int argc, char* argv[]) {
     //myTestFunctionAdvanced();
 
     //Store varibale and its index;
-    dense_hash_map<const char*, int, __gnu_cxx::hash<const char*>, eqstr> varibleMap;
-    varibleMap.set_empty_key(NULL);
+    //dense_hash_map<const char*, int, __gnu_cxx::hash<const char*>, eqstr> varibleMap;
+    //varibleMap.set_empty_key(NULL);
+    std::unordered_map<std::string, int> varibleMap;
+    
 
     //Temp Data Structure
     //char data[100];
@@ -933,8 +934,8 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    endTime = clock();//计时结束
-    std::cout << "The run time is: " <<(double)(endTime - startTime) / CLOCKS_PER_SEC << "s" << std::endl;
+    //endTime = clock();//计时结束
+    //std::cout << "The run time is: " <<(double)(endTime - startTime) / CLOCKS_PER_SEC << "s" << std::endl;
 
     of.flush();
     of.close();

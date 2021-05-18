@@ -45,6 +45,7 @@
         "streambuf": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp",
-        "dense_hash_map": "cpp"
+        "dense_hash_map": "cpp",
+        "ctime": "cpp"
     }
 }

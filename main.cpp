@@ -1,4 +1,5 @@
 #include <iostream>
+
 #include "glucose.hpp"
 
 
@@ -111,7 +112,7 @@ int main()
     //char data[100];
     string data;
     std::ifstream infile;
-    infile.open("./testcase/testcase5.v");
+    infile.open("./testcase/testcase1.v");
     char *result = NULL;
 
     int clauseCount = 0;
@@ -941,6 +942,16 @@ int main()
         s.printLit(mkLit(1));
         std::cout << std::endl;
         s.printLit(mkLit(2)); 
+        std::cout << std::endl;
+        s.printLit(mkLit(3)); 
+        std::cout << std::endl;
+        s.printLit(mkLit(4)); 
+        std::cout << std::endl;
+        s.printLit(mkLit(5)); 
+        std::cout << std::endl;
+        s.printLit(mkLit(6)); 
+        std::cout << std::endl;
+        s.printLit(mkLit(7)); 
         std::cout << std::endl;
 
         std::cout << "END NEQ" << std::endl;

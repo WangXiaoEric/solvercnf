@@ -1938,7 +1938,10 @@ inline  Lit  operator ^(Lit p, bool b)
             }
 
 inline  bool sign      (Lit p)              { return p.x & 1; }
-inline  int  var       (Lit p)              { return p.x >> 1; }
+inline  int  var       (Lit p)              { 
+    int temp = p.x >> 1; 
+    return temp;
+}
 
 // Mapping Literals to and from compact integers suitable for array indexing:
 inline  int  toInt     (Var v)              { return v; } 
@@ -3192,7 +3195,11 @@ inline void     Solver::newDecisionLevel()                      { trail_lim.push
 inline int      Solver::decisionLevel ()      const   { return trail_lim.size(); }
 inline uint32_t Solver::abstractLevel (Var x) const   { return 1 << (level(x) & 31); }
 inline lbool    Solver::value         (Var x) const   { return assigns[x]; }
-inline lbool    Solver::value         (Lit p) const   { return assigns[var(p)] ^ sign(p); }
+inline lbool    Solver::value         (Lit p) const   
+{ 
+    lbool temp = assigns[var(p)] ^ sign(p);
+    return temp; 
+}
 inline lbool    Solver::modelValue    (Var x) const   { return model[x]; }
 inline lbool    Solver::modelValue    (Lit p) const   { return model[var(p)] ^ sign(p); }
 inline int      Solver::nAssigns      ()      const   { return trail.size(); }
@@ -3245,6 +3252,7 @@ inline void     Solver::toDimacs     (const char* file, Lit p, Lit q, Lit r){ ve
 
 inline void Solver::printLit(Lit l)
 {
+    lbool temp =  value(l);
     printf("%s%d:%c", sign(l) ? "-" : "", var(l)+1, value(l) == l_True ? '1' : (value(l) == l_False ? '0' : 'X'));
 }
 

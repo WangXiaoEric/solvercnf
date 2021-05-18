@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 
 #include "glucose.hpp"
 
@@ -11,6 +12,8 @@ using namespace ::Glucose;
 #include <string.h>   
 #include <hash_fun.h>
 #include <vector>
+
+#include <cstdio>
 
 
 
@@ -71,7 +74,13 @@ Solver s;
 
 int main(int argc, char* argv[]) {
 
-    std::cout << "argc:  " << argc<< std::endl;
+    //delete the log result file.
+    remove(argv[2]);
+
+    // std::cout << "argv0  " << argv[0] << std::endl;
+    // std::cout << "argv1  " << argv[1] << std::endl;
+    // std::cout << "argv2  " << argv[2] << std::endl;
+
     //myTestFunctionAdvanced();
 
     //Store varibale and its index;
@@ -82,7 +91,12 @@ int main(int argc, char* argv[]) {
     //char data[100];
     string data;
     std::ifstream infile;
-    infile.open("./testcase/testcase1.v");
+
+    string tempargv = argv[1];
+    string inputPath = "./" + tempargv;
+    // infile.open("./testcase/testcase1.v");
+    infile.open(inputPath);
+
     char *result = NULL;
 
     int clauseCount = 0;
@@ -894,7 +908,11 @@ int main(int argc, char* argv[]) {
     // }
 
     //std::cout << "inputVector size is :" << inputVector.size() << std::endl;
-    
+    std::streambuf* coutBuf = std::cout.rdbuf();
+    std::ofstream of(argv[2]);
+    std::streambuf* fileBuf = of.rdbuf();
+    std::cout.rdbuf(fileBuf);
+
     if(ans){
         std::cout << "EQ" << std::endl;
     }else{
@@ -912,6 +930,11 @@ int main(int argc, char* argv[]) {
             std::cout << "<" << inputVector[i] << "><"  << s.getLitValue(mkLit(tempVaribale)) << ">"   << std::endl;
         }
     }
+
+    of.flush();
+    of.close();
+    // 恢复cout原来的流缓冲区指针
+    std::cout.rdbuf(coutBuf);
     
     return 0;
 }

@@ -1,2 +1,0 @@
-EQ
-The run time is: 0.533357s

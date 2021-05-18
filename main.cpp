@@ -2,8 +2,6 @@
 
 #include "glucose.hpp"
 
-
-
 using namespace ::Glucose;
 
 #include <google/dense_hash_map>
@@ -69,39 +67,11 @@ void getStringFromCharArrayAdvancedStr(string target, int begin, int end, string
     
 }
 
-
-void myTestFunction(){
-    char * target = new char [7];
-    target[0] = 'a';
-    target[1] = 'b';
-    target[2] = 'c';
-    target[3] = 'd';
-    target[4] = 'e';
-    target[6] = 'g';
-
-    int begin = 3;
-    int end = 5;
-    char * result = new char [end - begin + 1];
-    getStringFromCharArray(target, begin, end, result);
-    std::cout << result << std::endl;
-}
-
-void myTestFunctionAdvanced(){
-    string target = "abcdefg";
-    int begin = 3;
-    int end = 5;
-    string result = "123";
-    getStringFromCharArrayAdvancedStr(target, begin, end, result);
-    std::cout << result << std::endl;
-}
-
-
 Solver s;
 
-int main()
-{
+int main(int argc, char* argv[]) {
 
-    
+    std::cout << "argc:  " << argc<< std::endl;
     //myTestFunctionAdvanced();
 
     //Store varibale and its index;
@@ -886,12 +856,11 @@ int main()
             s.addClause(clause3);
             clauseCount++;
         }
-
     }
 
     // add the primary output clause;
     int eqindex = varibleMap["eq"];
-    std::cout << "eqindex is :" <<eqindex << std::endl;
+    //std::cout << "eqindex is :" <<eqindex << std::endl;
     vec<Lit> clauseeq;
     clauseeq.push(mkLit(eqindex));
     s.addClause(clauseeq);
@@ -908,7 +877,7 @@ int main()
     // s.newVar();
     // s.addClause(clause);
     
-    std::cout << "clauseCount is :" <<clauseCount << std::endl;
+    //std::cout << "clauseCount is :" <<clauseCount << std::endl;
 
     // s.printClause(1000);
     // s.printInitialClause(1);
@@ -916,7 +885,7 @@ int main()
 
 
     bool ans = s.solve();
-    std::cout << "This is :" <<ans << std::endl;
+    //std::cout << "This is :" <<ans << std::endl;
     //ht::iterator it = varibleMap.begin();
 
     // for (dense_hash_map<int*, int>::iterator it = varibleMap.begin(); it != varibleMap.end(); ++it) {
@@ -924,41 +893,24 @@ int main()
     //     std::cout << "EQ" << std::endl;
     // }
 
-    std::cout << "inputVector size is :" << inputVector.size() << std::endl;
+    //std::cout << "inputVector size is :" << inputVector.size() << std::endl;
     
     if(ans){
         std::cout << "EQ" << std::endl;
-        std::cout << "s.valuePhase(1);" << s.valuePhase(1) << std::endl;
-        std::cout << "s.valuePhase(2);" << s.valuePhase(2) << std::endl;
-        s.printLit(mkLit(1));
-        s.printLit(mkLit(2));
-
-        
     }else{
         std::cout << "NEQ" << std::endl;
-        std::cout << "s.valuePhase(1);" << s.valuePhase(1) << std::endl;
-        std::cout << "s.valuePhase(2);" << s.valuePhase(2) << std::endl;
-
-        s.printLit(mkLit(1));
-        std::cout << std::endl;
-        s.printLit(mkLit(2)); 
-        std::cout << std::endl;
-        s.printLit(mkLit(3)); 
-        std::cout << std::endl;
-        s.printLit(mkLit(4)); 
-        std::cout << std::endl;
-        s.printLit(mkLit(5)); 
-        std::cout << std::endl;
-        s.printLit(mkLit(6)); 
-        std::cout << std::endl;
-        s.printLit(mkLit(7)); 
-        std::cout << std::endl;
-
-        std::cout << "END NEQ" << std::endl;
-        // for (int i = 0; i < inputVector.size();i++)
-        // {
-        //     std::cout << "<" << inputVector[i] << "> <0|1>" << std::endl;
+        // for(int i = 0; i <= 1008; i ++){
+        //     s.printLit(mkLit(i));
+        //     std::cout << std::endl;
         // }
+
+        for (int i = 0; i < inputVector.size();i++)
+        {
+            const char *abc = inputVector[i].c_str();
+            int tempVaribale = varibleMap[abc];
+            //std::cout << s.getLitValue(mkLit(9)) << std::endl;
+            std::cout << "<" << inputVector[i] << "><"  << s.getLitValue(mkLit(tempVaribale)) << ">"   << std::endl;
+        }
     }
     
     return 0;

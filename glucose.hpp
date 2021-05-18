@@ -1937,7 +1937,10 @@ inline  Lit  operator ^(Lit p, bool b)
             return q; 
             }
 
-inline  bool sign      (Lit p)              { return p.x & 1; }
+inline  bool sign      (Lit p)              { 
+    bool temp = p.x & 1; 
+    return temp;
+    }
 inline  int  var       (Lit p)              { 
     int temp = p.x >> 1; 
     return temp;
@@ -2821,6 +2824,7 @@ public:
  
     // Display clauses and literals
     void printLit(Lit l);
+    int getLitValue(Lit l);
     void printClause(CRef c);
     void printInitialClause(CRef c);
     
@@ -3197,7 +3201,8 @@ inline uint32_t Solver::abstractLevel (Var x) const   { return 1 << (level(x) & 
 inline lbool    Solver::value         (Var x) const   { return assigns[x]; }
 inline lbool    Solver::value         (Lit p) const   
 { 
-    lbool temp = assigns[var(p)] ^ sign(p);
+    int tempint = var(p);
+    lbool temp = assigns[tempint] ^ sign(p);
     return temp; 
 }
 inline lbool    Solver::modelValue    (Var x) const   { return model[x]; }
@@ -3254,6 +3259,18 @@ inline void Solver::printLit(Lit l)
 {
     lbool temp =  value(l);
     printf("%s%d:%c", sign(l) ? "-" : "", var(l)+1, value(l) == l_True ? '1' : (value(l) == l_False ? '0' : 'X'));
+}
+
+inline int Solver::getLitValue(Lit l)
+{
+    lbool temp =  value(l);
+    if(temp == l_True){
+        return 1;
+    }else if(temp == l_False){
+        return 0;
+    }else {
+        return 1;
+    }
 }
 
 

@@ -14,7 +14,7 @@ using namespace ::Glucose;
 #include <vector>
 
 #include <cstdio>
-
+#include<ctime>
 
 
 
@@ -73,7 +73,9 @@ void getStringFromCharArrayAdvancedStr(string target, int begin, int end, string
 Solver s;
 
 int main(int argc, char* argv[]) {
-
+    
+    clock_t startTime,endTime;
+    startTime = clock();//计时开始
     //delete the log result file.
     remove(argv[2]);
 
@@ -930,6 +932,9 @@ int main(int argc, char* argv[]) {
             std::cout << "<" << inputVector[i] << "><"  << s.getLitValue(mkLit(tempVaribale)) << ">"   << std::endl;
         }
     }
+
+    endTime = clock();//计时结束
+    std::cout << "The run time is: " <<(double)(endTime - startTime) / CLOCKS_PER_SEC << "s" << std::endl;
 
     of.flush();
     of.close();
